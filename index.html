@@ -26,14 +26,22 @@
             scroll-behavior: smooth;
         }
         .fade-in {
-            animation: fadeIn 1s ease-out;
+            animation: fadeIn 0.5s ease-out;
         }
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
         .logo-shadow {
             filter: drop-shadow(0 4px 6px rgba(27, 66, 133, 0.1));
+        }
+        /* Custom scrollbar for AI response */
+        .ai-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .ai-scroll::-webkit-scrollbar-thumb {
+            background: #1b4285;
+            border-radius: 10px;
         }
     </style>
 </head>
@@ -43,8 +51,7 @@
     <nav class="bg-white/90 backdrop-blur-md shadow-sm fixed w-full z-50 border-b border-stone-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-20"> 
-                <div class="flex items-center">
-                    <!-- Nav Logo Icon -->
+                <div class="flex items-center cursor-pointer" onclick="showPage('home')">
                     <div class="w-10 h-10 mr-3 flex items-center justify-center bg-primary rounded-lg shadow-sm">
                         <i class="fa-solid fa-layer-group text-white text-xl"></i>
                     </div>
@@ -55,13 +62,13 @@
                 </div>
                 
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="#services" class="text-slate-600 hover:text-primary font-medium transition">Services</a>
-                    <a href="#reviews" class="text-slate-600 hover:text-primary font-medium transition">Reviews</a>
+                    <a href="javascript:void(0)" onclick="showPage('home', 'services')" class="text-slate-600 hover:text-primary font-medium transition">Services</a>
+                    <a href="javascript:void(0)" onclick="showPage('home', 'about')" class="text-slate-600 hover:text-primary font-medium transition">About Us</a>
+                    <a href="javascript:void(0)" onclick="showPage('home', 'reviews')" class="text-slate-600 hover:text-primary font-medium transition">Reviews</a>
                     <button onclick="scrollToContact()" class="bg-primary text-white px-6 py-2 rounded-full hover:bg-primary-dark transition shadow-md font-medium border border-transparent hover:border-primary">
                         Get a Free Quote
                     </button>
                 </div>
-                <!-- Mobile menu button -->
                 <div class="md:hidden flex items-center">
                     <button onclick="toggleMobileMenu()" class="text-slate-600 hover:text-primary focus:outline-none">
                         <i class="fa-solid fa-bars text-2xl"></i>
@@ -69,269 +76,467 @@
                 </div>
             </div>
         </div>
-        <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-slate-100 shadow-lg">
-            <a href="#services" class="block py-3 px-4 text-slate-600 hover:bg-cream">Services</a>
-            <a href="#reviews" class="block py-3 px-4 text-slate-600 hover:bg-cream">Reviews</a>
-            <button onclick="scrollToContact()" class="block w-full text-left py-3 px-4 text-primary font-bold hover:bg-cream">Get a Free Quote</button>
+            <a href="javascript:void(0)" onclick="showPage('home', 'services'); toggleMobileMenu()" class="block py-3 px-4 text-slate-600 hover:bg-cream">Services</a>
+            <a href="javascript:void(0)" onclick="showPage('home', 'about'); toggleMobileMenu()" class="block py-3 px-4 text-slate-600 hover:bg-cream">About Us</a>
+            <a href="javascript:void(0)" onclick="showPage('home', 'reviews'); toggleMobileMenu()" class="block py-3 px-4 text-slate-600 hover:bg-cream">Reviews</a>
+            <button onclick="scrollToContact(); toggleMobileMenu()" class="block w-full text-left py-3 px-4 text-primary font-bold hover:bg-cream">Get a Free Quote</button>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="pt-32 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center fade-in">
-        <span class="inline-block py-1.5 px-4 rounded-full bg-blue-50 text-primary text-xs font-bold mb-8 border border-primary/10 shadow-sm">
-            <i class="fa-solid fa-certificate mr-1.5"></i> PREMIUM QUALITY CRAFTSMANSHIP
-        </span>
-        
-        <!-- Integrated Logo -->
-        <div class="flex justify-center mb-10">
-            <div class="relative group">
-                <div class="absolute -inset-1 bg-gradient-to-r from-primary/20 to-blue-400/20 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
-                <div class="relative bg-white p-6 rounded-2xl shadow-xl border border-stone-100 flex items-center justify-center">
-                    <img src="seabloom-logo.png" alt="Seabloom Tile Services Logo" class="h-24 md:h-32 w-auto object-contain logo-shadow" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                    <!-- Fallback if image doesn't load immediately -->
-                    <div class="hidden text-center py-4 px-8">
-                        <i class="fa-solid fa-layer-group text-primary text-4xl mb-2"></i>
-                        <p class="font-bold text-xl text-primary">SEABLOOM</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <h1 class="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight mb-6 leading-tight">
-            High-End Craftsmanship <br/>
-            <span class="text-primary">Without the High-End Markup</span>
-        </h1>
-        
-        <p class="text-xl text-slate-600 max-w-2xl mx-auto mb-10 leading-relaxed font-medium">
-            Seabloom specializes in custom kitchens, bathrooms, and flooring that fit your budget and style. We deliver beautiful results with 100% transparency.
-        </p>
-        
-        <div class="flex flex-col sm:flex-row justify-center gap-4">
-            <button onclick="scrollToContact()" class="bg-primary text-white px-8 py-4 rounded-xl text-lg font-bold hover:bg-primary-dark transition shadow-lg hover:shadow-xl transform hover:-translate-y-1">
-                Get Your Free Estimate
-            </button>
-            <button onclick="document.getElementById('reviews').scrollIntoView({behavior: 'smooth'})" class="bg-white text-slate-700 border border-slate-200 px-8 py-4 rounded-xl text-lg font-bold hover:bg-stone-50 transition shadow-sm">
-                See Our Work
-            </button>
-        </div>
-    </section>
-
-    <!-- Trust Stats Section -->
-    <section class="py-12 bg-white border-y border-stone-100">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-                <div class="text-center md:border-r border-stone-100 last:border-0">
-                    <div class="text-4xl font-black text-primary mb-1">5,000+</div>
-                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Projects Done</div>
-                </div>
-                <div class="text-center md:border-r border-stone-100 last:border-0">
-                    <div class="text-4xl font-black text-primary mb-1">10+ Years</div>
-                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Experience</div>
-                </div>
-                <div class="text-center md:border-r border-stone-100 last:border-0">
-                    <div class="text-4xl font-black text-primary mb-1">Licensed</div>
-                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">& Fully Insured</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-4xl font-black text-primary mb-1">Elite</div>
-                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Local Experts</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Services Section -->
-    <section id="services" class="py-24 bg-white relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-20">
-                <h2 class="text-4xl font-black text-slate-900 mb-4">What We Do</h2>
-                <div class="h-1.5 w-20 bg-primary mx-auto rounded-full mb-6"></div>
-                <p class="text-slate-500 max-w-xl mx-auto text-lg">Professional installation services tailored to your specific renovation needs.</p>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-                <!-- Service 1 -->
-                <div class="p-10 rounded-3xl bg-cream/30 border border-stone-100 hover:shadow-2xl transition group hover:-translate-y-2">
-                    <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-primary mb-8 shadow-sm border border-stone-100 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
-                        <i class="fa-solid fa-bath text-3xl"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold text-slate-900 mb-4">Kitchen & Bath</h3>
-                    <p class="text-slate-500 leading-relaxed">From waterproof shower stalls to custom kitchen backsplashes that define your space.</p>
-                </div>
+    <!-- Main Content Wrapper -->
+    <main id="main-content">
+        <!-- Home Page -->
+        <div id="page-home" class="page-view">
+            <!-- Hero Section -->
+            <section class="pt-32 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center fade-in">
+                <span class="inline-block py-1.5 px-4 rounded-full bg-blue-50 text-primary text-xs font-bold mb-8 border border-primary/10 shadow-sm">
+                    <i class="fa-solid fa-certificate mr-1.5"></i> PREMIUM QUALITY CRAFTSMANSHIP
+                </span>
                 
-                <!-- Service 2 -->
-                <div class="p-10 rounded-3xl bg-cream/30 border border-stone-100 hover:shadow-2xl transition group hover:-translate-y-2">
-                    <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-primary mb-8 shadow-sm border border-stone-100 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
-                        <i class="fa-solid fa-vector-square text-3xl"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold text-slate-900 mb-4">Flooring Solutions</h3>
-                    <p class="text-slate-500 leading-relaxed">Precision-laid ceramic, porcelain, and stone flooring that lasts a lifetime.</p>
-                </div>
-                
-                <!-- Service 3 -->
-                <div class="p-10 rounded-3xl bg-cream/30 border border-stone-100 hover:shadow-2xl transition group hover:-translate-y-2">
-                    <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-primary mb-8 shadow-sm border border-stone-100 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
-                        <i class="fa-solid fa-wand-magic-sparkles text-3xl"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold text-slate-900 mb-4">Grout & Repair</h3>
-                    <p class="text-slate-500 leading-relaxed">Refresh your existing tile with professional grout cleaning and expert localized repairs.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Reviews Section -->
-    <section id="reviews" class="py-24 bg-primary text-white">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-black mb-4">Recent Client Reviews</h2>
-                <div class="flex justify-center space-x-1 text-yellow-400 text-xl mb-4">
-                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                </div>
-                <p class="text-blue-100 max-w-lg mx-auto">We're proud to maintain a 5-star reputation in the community.</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Review Card -->
-                <div class="bg-white/5 p-8 rounded-3xl border border-white/10 hover:bg-white/10 transition">
-                    <p class="text-blue-50 italic mb-8">"Seabloom did an amazing job on our kitchen backsplash. The price was significantly lower than other quotes, but the quality is top-notch. Highly recommend!"</p>
-                    <div class="flex items-center">
-                        <div class="w-10 h-10 rounded-full bg-blue-300 flex items-center justify-center text-primary font-bold mr-3">JD</div>
-                        <div>
-                            <p class="font-bold">John D.</p>
-                            <p class="text-xs text-blue-300 uppercase font-bold tracking-tighter">Verified Client</p>
+                <div class="flex justify-center mb-10">
+                    <div class="relative group">
+                        <div class="absolute -inset-1 bg-gradient-to-r from-primary/20 to-blue-400/20 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
+                        <div class="relative bg-white p-6 rounded-2xl shadow-xl border border-stone-100 flex items-center justify-center">
+                            <img src="image_4bdf6b.png" alt="Seabloom Logo" class="h-24 md:h-32 w-auto object-contain logo-shadow" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <div class="hidden text-center py-4 px-8">
+                                <i class="fa-solid fa-layer-group text-primary text-4xl mb-2"></i>
+                                <p class="font-bold text-xl text-primary">SEABLOOM</p>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Review Card -->
-                <div class="bg-white/5 p-8 rounded-3xl border border-white/10 hover:bg-white/10 transition">
-                    <p class="text-blue-50 italic mb-8">"Professional, clean, and fast. They re-tiled our master bath and it looks like a spa. Best value for money in town."</p>
-                    <div class="flex items-center">
-                        <div class="w-10 h-10 rounded-full bg-blue-300 flex items-center justify-center text-primary font-bold mr-3">SM</div>
-                        <div>
-                            <p class="font-bold">Sarah M.</p>
-                            <p class="text-xs text-blue-300 uppercase font-bold tracking-tighter">Verified Client</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Review Card -->
-                <div class="bg-white/5 p-8 rounded-3xl border border-white/10 hover:bg-white/10 transition">
-                    <p class="text-blue-50 italic mb-8">"I was worried about the cost of fixing my floor, but Seabloom gave me a very fair price and the work is flawless."</p>
-                    <div class="flex items-center">
-                        <div class="w-10 h-10 rounded-full bg-blue-300 flex items-center justify-center text-primary font-bold mr-3">MR</div>
-                        <div>
-                            <p class="font-bold">Mike R.</p>
-                            <p class="text-xs text-blue-300 uppercase font-bold tracking-tighter">Verified Client</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="py-24 px-4 bg-cream">
-        <div class="max-w-4xl mx-auto bg-white rounded-[2.5rem] shadow-2xl p-8 md:p-16 border border-stone-100">
-            <div class="text-center mb-12">
-                <h2 class="text-4xl font-black text-slate-900 mb-4">Let's Get Started</h2>
-                <p class="text-slate-500 font-medium">Request your free, no-obligation estimate today.</p>
-            </div>
-            
-            <form onsubmit="handleContact(event)" class="space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <input type="text" placeholder="Full Name" required 
-                        class="w-full px-6 py-4 rounded-2xl bg-cream/50 border border-transparent focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition font-medium">
-                    <input type="tel" placeholder="Phone Number" required 
-                        class="w-full px-6 py-4 rounded-2xl bg-cream/50 border border-transparent focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition font-medium">
-                </div>
+                <h1 class="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight mb-6 leading-tight">
+                    High-End Craftsmanship <br/>
+                    <span class="text-primary">Without the High-End Markup</span>
+                </h1>
                 
-                <input type="email" placeholder="Email Address" required 
-                    class="w-full px-6 py-4 rounded-2xl bg-cream/50 border border-transparent focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition font-medium">
+                <p class="text-xl text-slate-600 max-w-2xl mx-auto mb-10 leading-relaxed font-medium">
+                    Seabloom specializes in custom kitchens, bathrooms, and flooring that fit your budget and style.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <button onclick="scrollToContact()" class="bg-primary text-white px-8 py-4 rounded-xl text-lg font-bold hover:bg-primary-dark transition shadow-lg">
+                        Get Your Free Estimate
+                    </button>
+                    <!-- Gemini Integration 1: AI Planner -->
+                    <button onclick="openAiPlanner()" class="bg-white text-primary border-2 border-primary/20 px-8 py-4 rounded-xl text-lg font-bold hover:border-primary transition shadow-md flex items-center justify-center">
+                        ✨ Visualize Your Project
+                    </button>
+                </div>
+            </section>
 
-                <textarea rows="4" placeholder="Tell us about your project (e.g. Bathroom Floor, Kitchen Backsplash...)" 
-                    class="w-full px-6 py-4 rounded-2xl bg-cream/50 border border-transparent focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition font-medium"></textarea>
+            <!-- Services Grid -->
+            <section id="services" class="py-24 bg-white relative">
+                <div class="max-w-7xl mx-auto px-4">
+                    <div class="text-center mb-16">
+                        <h2 class="text-4xl font-black text-slate-900 mb-4">Our Specializations</h2>
+                        <p class="text-slate-500">Click a service to view full details and project gallery.</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                        <div onclick="showPage('service-kitchen')" class="cursor-pointer p-10 rounded-3xl bg-cream/30 border border-stone-100 hover:shadow-2xl transition group">
+                            <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-primary mb-8 shadow-sm group-hover:bg-primary group-hover:text-white transition">
+                                <i class="fa-solid fa-bath text-3xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-slate-900 mb-4">Kitchen & Bath</h3>
+                            <p class="text-slate-500 mb-6">Premium waterproof solutions and aesthetic backsplashes.</p>
+                            <span class="text-primary font-bold text-sm">View Projects <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                        </div>
+                        
+                        <div onclick="showPage('service-flooring')" class="cursor-pointer p-10 rounded-3xl bg-cream/30 border border-stone-100 hover:shadow-2xl transition group">
+                            <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-primary mb-8 shadow-sm group-hover:bg-primary group-hover:text-white transition">
+                                <i class="fa-solid fa-vector-square text-3xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-slate-900 mb-4">Flooring Solutions</h3>
+                            <p class="text-slate-500 mb-6">Large format porcelain and natural stone flooring.</p>
+                            <span class="text-primary font-bold text-sm">View Projects <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                        </div>
+                        
+                        <div onclick="showPage('service-repair')" class="cursor-pointer p-10 rounded-3xl bg-cream/30 border border-stone-100 hover:shadow-2xl transition group">
+                            <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-primary mb-8 shadow-sm group-hover:bg-primary group-hover:text-white transition">
+                                <i class="fa-solid fa-wand-magic-sparkles text-3xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-slate-900 mb-4">Grout & Repair</h3>
+                            <p class="text-slate-500 mb-6">Restoration and professional localized tile repairs.</p>
+                            <span class="text-primary font-bold text-sm">View Projects <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-                <button type="submit" class="w-full bg-primary hover:bg-primary-dark text-white font-black py-5 rounded-2xl transition shadow-xl hover:shadow-2xl transform hover:-translate-y-1 text-lg">
-                    Send My Request
+            <!-- About Section -->
+            <section id="about" class="py-24 bg-cream overflow-hidden">
+                <div class="max-w-7xl mx-auto px-4">
+                    <div class="flex flex-col md:flex-row items-center gap-16">
+                        <div class="md:w-1/2">
+                            <h2 class="text-4xl font-black text-slate-900 mb-6">Built on Trust and Precision</h2>
+                            <p class="text-lg text-slate-600 mb-6 leading-relaxed">Seabloom Tile Services was founded on the principle that high-end craftsmanship should be accessible. We don't just lay tile; we build the foundations for your home's most cherished spaces.</p>
+                            <div class="grid grid-cols-2 gap-6">
+                                <div class="p-4 bg-white rounded-2xl shadow-sm border border-stone-100">
+                                    <p class="text-3xl font-black text-primary mb-1">15+</p>
+                                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Years Experience</p>
+                                </div>
+                                <div class="p-4 bg-white rounded-2xl shadow-sm border border-stone-100">
+                                    <p class="text-3xl font-black text-primary mb-1">500+</p>
+                                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Projects Done</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="md:w-1/2 relative">
+                            <div class="absolute -top-10 -right-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl"></div>
+                            <img src="https://images.unsplash.com/photo-1517646280104-a6fe60729586?auto=format&fit=crop&w=800&q=80" class="rounded-[2.5rem] shadow-2xl relative z-10" alt="Master Tiler">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Reviews Section -->
+            <section id="reviews" class="py-24 bg-white">
+                <div class="max-w-7xl mx-auto px-4">
+                    <div class="text-center mb-16">
+                        <h2 class="text-4xl font-black text-slate-900 mb-4">What Our Clients Say</h2>
+                        <div class="flex justify-center text-yellow-400 space-x-1 mb-4">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="p-8 bg-cream/30 rounded-3xl border border-stone-100">
+                            <p class="text-slate-600 mb-6 italic">"Seabloom transformed our outdated bathroom into a modern spa. The attention to detail on the tile alignment was incredible."</p>
+                            <p class="font-bold text-slate-900">— Sarah J., Homeowner</p>
+                        </div>
+                        <div class="p-8 bg-cream/30 rounded-3xl border border-stone-100">
+                            <p class="text-slate-600 mb-6 italic">"Reliable, clean, and professional. They finished our kitchen backsplash in record time without compromising quality."</p>
+                            <p class="font-bold text-slate-900">— Michael R., Interior Designer</p>
+                        </div>
+                        <div class="p-8 bg-cream/30 rounded-3xl border border-stone-100">
+                            <p class="text-slate-600 mb-6 italic">"The only tile contractor I trust. Their waterproofing system gives me peace of mind for our second-story showers."</p>
+                            <p class="font-bold text-slate-900">— David L., Contractor</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Detail Page: Kitchen & Bath -->
+        <div id="page-service-kitchen" class="page-view hidden pt-32 pb-24 fade-in">
+            <div class="max-w-5xl mx-auto px-4">
+                <button onclick="showPage('home', 'services')" class="text-primary font-bold mb-8 hover:underline">
+                    <i class="fa-solid fa-arrow-left mr-2"></i> Back to Services
                 </button>
-            </form>
-            
-            <div id="success-message" class="hidden mt-6 bg-green-50 text-green-700 p-6 rounded-2xl text-center border border-green-100">
-                <i class="fa-solid fa-circle-check text-2xl mb-2 block"></i>
-                <p class="font-bold">Request Sent Successfully!</p>
-                <p class="text-sm opacity-80">We'll reach out to you within 24 hours.</p>
+                <h2 class="text-5xl font-black text-slate-900 mb-6">Kitchen & Bathroom Masterpieces</h2>
+                <p class="text-xl text-slate-600 mb-12">We specialize in transforming the most used rooms in your house into luxurious escapes.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+                    <div class="bg-stone-200 aspect-video rounded-3xl overflow-hidden shadow-lg">
+                        <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80" alt="Kitchen Project" class="w-full h-full object-cover">
+                    </div>
+                    <div class="bg-stone-200 aspect-video rounded-3xl overflow-hidden shadow-lg">
+                        <img src="https://images.unsplash.com/photo-1620626011761-9963d7521576?auto=format&fit=crop&w=800&q=80" alt="Bathroom Project" class="w-full h-full object-cover">
+                    </div>
+                </div>
+
+                <div class="prose prose-lg text-slate-600">
+                    <h3 class="text-2xl font-bold text-slate-900 mb-4">Our Process</h3>
+                    <p class="mb-4">1. <strong>Preparation:</strong> We strip existing surfaces and ensure the substrate is perfectly level.</p>
+                    <p class="mb-4">2. <strong>Waterproofing:</strong> We use industry-leading Schluter®-KERDI systems.</p>
+                    <p>3. <strong>Precision Setting:</strong> Masters focus on symmetrical layouts and perfect centering.</p>
+                </div>
             </div>
         </div>
-    </section>
 
-    <!-- Footer -->
-    <footer class="bg-white border-t border-stone-100 pt-20 pb-10">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12">
-                <div class="mb-8 md:mb-0">
-                    <div class="flex items-center mb-2">
-                        <img src="seabloom-logo.png" alt="Seabloom Logo" class="h-10 w-auto mr-3" onerror="this.style.display='none';">
+        <!-- Detail Page: Flooring -->
+        <div id="page-service-flooring" class="page-view hidden pt-32 pb-24 fade-in">
+            <div class="max-w-5xl mx-auto px-4">
+                <button onclick="showPage('home', 'services')" class="text-primary font-bold mb-8 hover:underline">
+                    <i class="fa-solid fa-arrow-left mr-2"></i> Back to Services
+                </button>
+                <h2 class="text-5xl font-black text-slate-900 mb-6">Expert Flooring Solutions</h2>
+                <p class="text-xl text-slate-600 mb-12">Flooring designed for durability and visual impact.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+                    <img src="https://images.unsplash.com/photo-1516455590571-18256e5bb9ff?auto=format&fit=crop&w=600&q=80" class="rounded-2xl h-64 w-full object-cover shadow-md" alt="Floor 1">
+                    <img src="https://images.unsplash.com/photo-1505333022138-038c7f3e80f2?auto=format&fit=crop&w=600&q=80" class="rounded-2xl h-64 w-full object-cover shadow-md" alt="Floor 2">
+                    <img src="https://images.unsplash.com/photo-1581850518616-bcb8186c443e?auto=format&fit=crop&w=600&q=80" class="rounded-2xl h-64 w-full object-cover shadow-md" alt="Floor 3">
+                </div>
+
+                <div class="bg-white p-8 rounded-3xl border border-stone-100 shadow-sm">
+                    <h3 class="text-2xl font-bold text-slate-900 mb-4">Sub-Floor Excellence</h3>
+                    <p class="text-slate-600">We prioritize the substrate to prevent cracking and ensure longevity.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detail Page: Repair -->
+        <div id="page-service-repair" class="page-view hidden pt-32 pb-24 fade-in">
+            <div class="max-w-5xl mx-auto px-4">
+                <button onclick="showPage('home', 'services')" class="text-primary font-bold mb-8 hover:underline">
+                    <i class="fa-solid fa-arrow-left mr-2"></i> Back to Services
+                </button>
+                <h2 class="text-5xl font-black text-slate-900 mb-6">Grout & Tile Restoration</h2>
+                <p class="text-xl text-slate-600 mb-12">Restore, don't just replace.</p>
+                
+                <div class="flex flex-col md:flex-row gap-12 items-center">
+                    <div class="md:w-1/2">
+                        <img src="https://images.unsplash.com/photo-1621905251918-48416bd8575a?auto=format&fit=crop&w=800&q=80" class="rounded-3xl shadow-lg" alt="Repair Work">
+                    </div>
+                    <div class="md:w-1/2">
+                        <h3 class="text-2xl font-bold text-slate-900 mb-4">Localized Repairs</h3>
+                        <p class="text-slate-600 mb-6">Replace single tiles without disturbing the surrounding area.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- AI Planner Modal -->
+    <div id="ai-planner-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-primary-dark/40 backdrop-blur-sm" onclick="closeAiPlanner()"></div>
+        <div class="relative bg-white rounded-[2rem] shadow-2xl max-w-2xl w-full overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="p-8 border-b border-stone-100 bg-primary text-white flex justify-between items-center">
+                <div>
+                    <h3 class="text-2xl font-black">✨ Project Visionary</h3>
+                    <p class="text-blue-100 text-xs font-bold uppercase tracking-widest mt-1">AI-Powered Planning</p>
+                </div>
+                <button onclick="closeAiPlanner()" class="text-white/60 hover:text-white"><i class="fa-solid fa-xmark text-2xl"></i></button>
+            </div>
+            
+            <div class="p-8 overflow-y-auto ai-scroll">
+                <div id="ai-input-view">
+                    <p class="text-slate-600 mb-6">Tell us your rough idea (e.g., "I want a modern blue bathroom with gold accents") and Gemini will draft a professional project scope for you.</p>
+                    <textarea id="ai-user-prompt" rows="3" placeholder="Describe your dream tile project..." class="w-full px-6 py-4 rounded-2xl bg-cream border border-stone-100 focus:ring-2 focus:ring-primary/20 outline-none transition mb-4"></textarea>
+                    
+                    <div class="mb-6">
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Add Visual Context (Optional)</p>
+                        <div class="flex items-center space-x-4">
+                            <label class="cursor-pointer bg-white border border-stone-200 px-4 py-2 rounded-lg text-sm font-bold text-slate-600 hover:bg-stone-50 transition">
+                                <i class="fa-solid fa-camera mr-2"></i> Upload Photo
+                                <input type="file" id="ai-image-input" class="hidden" accept="image/*" onchange="previewAiImage(this)">
+                            </label>
+                            <div id="ai-image-preview" class="hidden w-12 h-12 rounded-lg border border-stone-200 overflow-hidden"></div>
+                        </div>
+                    </div>
+
+                    <button onclick="generateProjectScope()" id="ai-generate-btn" class="w-full bg-primary text-white font-black py-4 rounded-xl shadow-lg hover:bg-primary-dark transition flex items-center justify-center">
+                        Generate Scope ✨
+                    </button>
+                </div>
+
+                <div id="ai-result-view" class="hidden">
+                    <div id="ai-response-content" class="prose prose-blue text-slate-700 space-y-4">
+                        <!-- AI Response goes here -->
+                    </div>
+                    <div class="mt-8 flex gap-4">
+                        <button onclick="copyAiText()" class="flex-1 bg-stone-100 text-slate-700 font-bold py-3 rounded-xl text-sm">Copy to Clipboard</button>
+                        <button onclick="applyAiToContact()" class="flex-1 bg-primary text-white font-bold py-3 rounded-xl text-sm">Apply to Quote Form</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shared Sections -->
+    <div id="shared-sections">
+        <section id="contact" class="py-24 px-4 bg-cream">
+            <div class="max-w-4xl mx-auto bg-white rounded-[2.5rem] shadow-2xl p-8 md:p-16 border border-stone-100">
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl font-black text-slate-900 mb-4">Let's Get Started</h2>
+                    <p class="text-slate-500 font-medium">Request your free, no-obligation estimate today.</p>
+                </div>
+                <form id="contact-form" onsubmit="handleContact(event)" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <input type="text" placeholder="Full Name" required class="w-full px-6 py-4 rounded-2xl bg-cream/50 border border-transparent focus:bg-white focus:ring-2 focus:ring-primary/20 outline-none transition">
+                        <input type="tel" placeholder="Phone Number" required class="w-full px-6 py-4 rounded-2xl bg-cream/50 border border-transparent focus:bg-white focus:ring-2 focus:ring-primary/20 outline-none transition">
+                    </div>
+                    <input type="email" placeholder="Email Address" required class="w-full px-6 py-4 rounded-2xl bg-cream/50 border border-transparent focus:bg-white focus:ring-2 focus:ring-primary/20 outline-none transition">
+                    <textarea id="contact-message" rows="4" placeholder="Tell us about your project..." class="w-full px-6 py-4 rounded-2xl bg-cream/50 border border-transparent focus:bg-white focus:ring-2 focus:ring-primary/20 outline-none transition"></textarea>
+                    <button type="submit" class="w-full bg-primary hover:bg-primary-dark text-white font-black py-5 rounded-2xl transition shadow-xl text-lg">Send My Request</button>
+                </form>
+                <div id="success-message" class="hidden mt-6 bg-green-50 text-green-700 p-6 rounded-2xl text-center border border-green-100">
+                    <p class="font-bold">Request Sent Successfully!</p>
+                </div>
+            </div>
+        </section>
+
+        <footer class="bg-white border-t border-stone-100 pt-20 pb-10">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="flex flex-col md:flex-row justify-between items-center mb-12 text-center md:text-left">
+                    <div class="flex items-center mb-8 md:mb-0">
+                        <div class="w-10 h-10 mr-3 flex items-center justify-center bg-primary rounded-lg shadow-sm">
+                            <i class="fa-solid fa-layer-group text-white"></i>
+                        </div>
                         <span class="font-black text-2xl text-primary tracking-tighter">Seabloom</span>
                     </div>
-                    <p class="text-slate-400 font-medium max-w-xs">High-end tile craftsmanship without the premium markup.</p>
+                    <div class="flex flex-wrap justify-center gap-6 md:gap-10 text-sm font-bold text-slate-500 uppercase tracking-widest">
+                        <a href="javascript:void(0)" onclick="showPage('home', 'services')" class="hover:text-primary transition">Services</a>
+                        <a href="javascript:void(0)" onclick="showPage('home', 'about')" class="hover:text-primary transition">About</a>
+                        <a href="javascript:void(0)" onclick="showPage('home', 'reviews')" class="hover:text-primary transition">Reviews</a>
+                    </div>
                 </div>
-                <div class="flex space-x-10 text-sm font-bold text-slate-500 uppercase tracking-widest">
-                    <a href="#services" class="hover:text-primary transition">Services</a>
-                    <a href="#reviews" class="hover:text-primary transition">Reviews</a>
-                    <a href="#contact" class="hover:text-primary transition">Contact</a>
-                </div>
-            </div>
-            <div class="pt-10 border-t border-stone-50 flex flex-col md:flex-row justify-between items-center text-slate-400 text-xs font-bold uppercase tracking-widest">
-                <p>© 2024 SEABLOOM TILE SERVICES. ALL RIGHTS RESERVED.</p>
-                <div class="flex space-x-6 mt-6 md:mt-0">
-                    <a href="#" class="hover:text-primary"><i class="fa-brands fa-instagram text-lg"></i></a>
-                    <a href="#" class="hover:text-primary"><i class="fa-brands fa-facebook text-lg"></i></a>
+                <div class="pt-10 border-t border-stone-50 text-center text-slate-400 text-xs font-bold uppercase tracking-widest">
+                    <p>© 2024 SEABLOOM TILE SERVICES. POWERED BY CRAFTSMANSHIP & ✨ GEMINI AI.</p>
                 </div>
             </div>
-        </div>
-    </footer>
+        </footer>
+    </div>
 
     <script>
+        const apiKey = ""; // Provided by environment
+
         function toggleMobileMenu() {
             const menu = document.getElementById('mobile-menu');
             menu.classList.toggle('hidden');
+        }
+
+        function showPage(pageId, scrollToId = null) {
+            document.querySelectorAll('.page-view').forEach(p => p.classList.add('hidden'));
+            const target = document.getElementById('page-' + pageId);
+            if (target) {
+                target.classList.remove('hidden');
+                window.scrollTo(0, 0);
+            }
+            if (scrollToId) {
+                setTimeout(() => {
+                    const section = document.getElementById(scrollToId);
+                    if (section) section.scrollIntoView({ behavior: 'smooth' });
+                }, 100);
+            }
         }
 
         function scrollToContact() {
             document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
         }
 
-        function toggleReviewModal() {
-            // Simplified for the single-page experience
-            alert("This feature would allow clients to submit live reviews.");
+        // AI Features
+        function openAiPlanner() {
+            document.getElementById('ai-planner-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeAiPlanner() {
+            document.getElementById('ai-planner-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function previewAiImage(input) {
+            const preview = document.getElementById('ai-image-preview');
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.style.backgroundImage = `url(${e.target.result})`;
+                    preview.style.backgroundSize = 'cover';
+                    preview.classList.remove('hidden');
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        async function fetchGemini(payload, model = "gemini-2.5-flash-preview-09-2025") {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+            let retry = 0;
+            const delay = [1000, 2000, 4000, 8000, 16000];
+
+            while (retry < 5) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (response.ok) return await response.json();
+                    if (response.status !== 429 && response.status !== 500) break;
+                } catch (e) {}
+                await new Promise(r => setTimeout(r, delay[retry]));
+                retry++;
+            }
+            throw new Error("Gemini API Error after retries");
+        }
+
+        async function generateProjectScope() {
+            const promptInput = document.getElementById('ai-user-prompt').value;
+            const imgInput = document.getElementById('ai-image-input');
+            const btn = document.getElementById('ai-generate-btn');
+            
+            if (!promptInput.trim()) return;
+
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Visioning...';
+            btn.disabled = true;
+
+            try {
+                let payload;
+                if (imgInput.files && imgInput.files[0]) {
+                    const base64Data = await new Promise((resolve) => {
+                        const reader = new FileReader();
+                        reader.onload = () => resolve(reader.result.split(',')[1]);
+                        reader.readAsDataURL(imgInput.files[0]);
+                    });
+
+                    payload = {
+                        contents: [{
+                            parts: [
+                                { text: `Act as a master tile contractor. Based on this description: "${promptInput}" and the attached image, draft a professional Project Scope. Include: 1. Style Profile, 2. Suggested Materials, 3. Technical Considerations (waterproofing, sub-floor), and 4. Estimated timeline. Format with bold headers.` },
+                                { inlineData: { mimeType: imgInput.files[0].type, data: base64Data } }
+                            ]
+                        }]
+                    };
+                } else {
+                    payload = {
+                        contents: [{
+                            parts: [{ text: `Act as a master tile contractor. Based on this description: "${promptInput}", draft a professional Project Scope. Include: 1. Style Profile, 2. Suggested Materials, 3. Technical Considerations (waterproofing, sub-floor), and 4. Estimated timeline. Format with bold headers.` }]
+                        }]
+                    };
+                }
+
+                const result = await fetchGemini(payload);
+                const text = result.candidates?.[0]?.content?.parts?.[0]?.text || "Failed to generate scope.";
+                
+                document.getElementById('ai-response-content').innerHTML = text.replace(/\n/g, '<br>');
+                document.getElementById('ai-input-view').classList.add('hidden');
+                document.getElementById('ai-result-view').classList.remove('hidden');
+            } catch (err) {
+                console.error(err);
+                alert("Failed to connect to the ✨ Visionary Engine. Please try again.");
+            } finally {
+                btn.innerHTML = 'Generate Scope ✨';
+                btn.disabled = false;
+            }
+        }
+
+        function copyAiText() {
+            const content = document.getElementById('ai-response-content').innerText;
+            const el = document.createElement('textarea');
+            el.value = content;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            alert("Copied to clipboard!");
+        }
+
+        function applyAiToContact() {
+            const content = document.getElementById('ai-response-content').innerText;
+            document.getElementById('contact-message').value = "--- AI ASSISTED SCOPE ---\n" + content;
+            closeAiPlanner();
+            scrollToContact();
         }
 
         function handleContact(e) {
             e.preventDefault();
             const button = e.target.querySelector('button');
             const successMsg = document.getElementById('success-message');
-            
-            button.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Sending...';
-            button.disabled = true;
-            
+            button.innerHTML = 'Sending...';
             setTimeout(() => {
-                button.innerHTML = 'Request Received';
-                button.classList.replace('bg-primary', 'bg-green-600');
+                button.innerHTML = 'Sent!';
                 successMsg.classList.remove('hidden');
                 e.target.reset();
-                
-                setTimeout(() => {
-                    button.innerHTML = 'Send My Request';
-                    button.classList.replace('bg-green-600', 'bg-primary');
-                    button.disabled = false;
-                    successMsg.classList.add('hidden');
-                }, 5000);
-            }, 1500);
+            }, 1000);
         }
     </script>
 </body>
-
 </html>
