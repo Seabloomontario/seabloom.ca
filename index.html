@@ -35,14 +35,6 @@
         .logo-shadow {
             filter: drop-shadow(0 4px 6px rgba(27, 66, 133, 0.1));
         }
-        /* Custom scrollbar for AI response */
-        .ai-scroll::-webkit-scrollbar {
-            width: 4px;
-        }
-        .ai-scroll::-webkit-scrollbar-thumb {
-            background: #1b4285;
-            border-radius: 10px;
-        }
     </style>
 </head>
 <body class="bg-cream text-slate-800">
@@ -116,13 +108,9 @@
                     Seabloom specializes in custom kitchens, bathrooms, and flooring that fit your budget and style.
                 </p>
                 
-                <div class="flex flex-col sm:flex-row justify-center gap-4">
-                    <button onclick="scrollToContact()" class="bg-primary text-white px-8 py-4 rounded-xl text-lg font-bold hover:bg-primary-dark transition shadow-lg">
+                <div class="flex justify-center">
+                    <button onclick="scrollToContact()" class="bg-primary text-white px-10 py-4 rounded-xl text-lg font-bold hover:bg-primary-dark transition shadow-lg">
                         Get Your Free Estimate
-                    </button>
-                    <!-- Gemini Integration 1: AI Planner -->
-                    <button onclick="openAiPlanner()" class="bg-white text-primary border-2 border-primary/20 px-8 py-4 rounded-xl text-lg font-bold hover:border-primary transition shadow-md flex items-center justify-center">
-                        ✨ Visualize Your Project
                     </button>
                 </div>
             </section>
@@ -295,52 +283,6 @@
         </div>
     </main>
 
-    <!-- AI Planner Modal -->
-    <div id="ai-planner-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-primary-dark/40 backdrop-blur-sm" onclick="closeAiPlanner()"></div>
-        <div class="relative bg-white rounded-[2rem] shadow-2xl max-w-2xl w-full overflow-hidden flex flex-col max-h-[90vh]">
-            <div class="p-8 border-b border-stone-100 bg-primary text-white flex justify-between items-center">
-                <div>
-                    <h3 class="text-2xl font-black">✨ Project Visionary</h3>
-                    <p class="text-blue-100 text-xs font-bold uppercase tracking-widest mt-1">AI-Powered Planning</p>
-                </div>
-                <button onclick="closeAiPlanner()" class="text-white/60 hover:text-white"><i class="fa-solid fa-xmark text-2xl"></i></button>
-            </div>
-            
-            <div class="p-8 overflow-y-auto ai-scroll">
-                <div id="ai-input-view">
-                    <p class="text-slate-600 mb-6">Tell us your rough idea (e.g., "I want a modern blue bathroom with gold accents") and Gemini will draft a professional project scope for you.</p>
-                    <textarea id="ai-user-prompt" rows="3" placeholder="Describe your dream tile project..." class="w-full px-6 py-4 rounded-2xl bg-cream border border-stone-100 focus:ring-2 focus:ring-primary/20 outline-none transition mb-4"></textarea>
-                    
-                    <div class="mb-6">
-                        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Add Visual Context (Optional)</p>
-                        <div class="flex items-center space-x-4">
-                            <label class="cursor-pointer bg-white border border-stone-200 px-4 py-2 rounded-lg text-sm font-bold text-slate-600 hover:bg-stone-50 transition">
-                                <i class="fa-solid fa-camera mr-2"></i> Upload Photo
-                                <input type="file" id="ai-image-input" class="hidden" accept="image/*" onchange="previewAiImage(this)">
-                            </label>
-                            <div id="ai-image-preview" class="hidden w-12 h-12 rounded-lg border border-stone-200 overflow-hidden"></div>
-                        </div>
-                    </div>
-
-                    <button onclick="generateProjectScope()" id="ai-generate-btn" class="w-full bg-primary text-white font-black py-4 rounded-xl shadow-lg hover:bg-primary-dark transition flex items-center justify-center">
-                        Generate Scope ✨
-                    </button>
-                </div>
-
-                <div id="ai-result-view" class="hidden">
-                    <div id="ai-response-content" class="prose prose-blue text-slate-700 space-y-4">
-                        <!-- AI Response goes here -->
-                    </div>
-                    <div class="mt-8 flex gap-4">
-                        <button onclick="copyAiText()" class="flex-1 bg-stone-100 text-slate-700 font-bold py-3 rounded-xl text-sm">Copy to Clipboard</button>
-                        <button onclick="applyAiToContact()" class="flex-1 bg-primary text-white font-bold py-3 rounded-xl text-sm">Apply to Quote Form</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Shared Sections -->
     <div id="shared-sections">
         <section id="contact" class="py-24 px-4 bg-cream">
@@ -380,15 +322,13 @@
                     </div>
                 </div>
                 <div class="pt-10 border-t border-stone-50 text-center text-slate-400 text-xs font-bold uppercase tracking-widest">
-                    <p>© 2024 SEABLOOM TILE SERVICES. POWERED BY CRAFTSMANSHIP & ✨ GEMINI AI.</p>
+                    <p>© 2024 SEABLOOM TILE SERVICES.</p>
                 </div>
             </div>
         </footer>
     </div>
 
     <script>
-        const apiKey = ""; // Provided by environment
-
         function toggleMobileMenu() {
             const menu = document.getElementById('mobile-menu');
             menu.classList.toggle('hidden');
@@ -411,119 +351,6 @@
 
         function scrollToContact() {
             document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // AI Features
-        function openAiPlanner() {
-            document.getElementById('ai-planner-modal').classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeAiPlanner() {
-            document.getElementById('ai-planner-modal').classList.add('hidden');
-            document.body.style.overflow = 'auto';
-        }
-
-        function previewAiImage(input) {
-            const preview = document.getElementById('ai-image-preview');
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    preview.style.backgroundImage = `url(${e.target.result})`;
-                    preview.style.backgroundSize = 'cover';
-                    preview.classList.remove('hidden');
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        async function fetchGemini(payload, model = "gemini-2.5-flash-preview-09-2025") {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-            let retry = 0;
-            const delay = [1000, 2000, 4000, 8000, 16000];
-
-            while (retry < 5) {
-                try {
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                    if (response.ok) return await response.json();
-                    if (response.status !== 429 && response.status !== 500) break;
-                } catch (e) {}
-                await new Promise(r => setTimeout(r, delay[retry]));
-                retry++;
-            }
-            throw new Error("Gemini API Error after retries");
-        }
-
-        async function generateProjectScope() {
-            const promptInput = document.getElementById('ai-user-prompt').value;
-            const imgInput = document.getElementById('ai-image-input');
-            const btn = document.getElementById('ai-generate-btn');
-            
-            if (!promptInput.trim()) return;
-
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Visioning...';
-            btn.disabled = true;
-
-            try {
-                let payload;
-                if (imgInput.files && imgInput.files[0]) {
-                    const base64Data = await new Promise((resolve) => {
-                        const reader = new FileReader();
-                        reader.onload = () => resolve(reader.result.split(',')[1]);
-                        reader.readAsDataURL(imgInput.files[0]);
-                    });
-
-                    payload = {
-                        contents: [{
-                            parts: [
-                                { text: `Act as a master tile contractor. Based on this description: "${promptInput}" and the attached image, draft a professional Project Scope. Include: 1. Style Profile, 2. Suggested Materials, 3. Technical Considerations (waterproofing, sub-floor), and 4. Estimated timeline. Format with bold headers.` },
-                                { inlineData: { mimeType: imgInput.files[0].type, data: base64Data } }
-                            ]
-                        }]
-                    };
-                } else {
-                    payload = {
-                        contents: [{
-                            parts: [{ text: `Act as a master tile contractor. Based on this description: "${promptInput}", draft a professional Project Scope. Include: 1. Style Profile, 2. Suggested Materials, 3. Technical Considerations (waterproofing, sub-floor), and 4. Estimated timeline. Format with bold headers.` }]
-                        }]
-                    };
-                }
-
-                const result = await fetchGemini(payload);
-                const text = result.candidates?.[0]?.content?.parts?.[0]?.text || "Failed to generate scope.";
-                
-                document.getElementById('ai-response-content').innerHTML = text.replace(/\n/g, '<br>');
-                document.getElementById('ai-input-view').classList.add('hidden');
-                document.getElementById('ai-result-view').classList.remove('hidden');
-            } catch (err) {
-                console.error(err);
-                alert("Failed to connect to the ✨ Visionary Engine. Please try again.");
-            } finally {
-                btn.innerHTML = 'Generate Scope ✨';
-                btn.disabled = false;
-            }
-        }
-
-        function copyAiText() {
-            const content = document.getElementById('ai-response-content').innerText;
-            const el = document.createElement('textarea');
-            el.value = content;
-            document.body.appendChild(el);
-            el.select();
-            document.execCommand('copy');
-            document.body.removeChild(el);
-            alert("Copied to clipboard!");
-        }
-
-        function applyAiToContact() {
-            const content = document.getElementById('ai-response-content').innerText;
-            document.getElementById('contact-message').value = "--- AI ASSISTED SCOPE ---\n" + content;
-            closeAiPlanner();
-            scrollToContact();
         }
 
         function handleContact(e) {
